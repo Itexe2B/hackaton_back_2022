@@ -81,11 +81,17 @@ def get_autocomplete_film(request: Request, title: str):
     film = Films()
     list_film = film.get_list_film().loc[:, ['id', 'title']]
     list_film = list_film[list_film['title'].str.contains(title, case=False)]
+    if list_film.empty:
+        return []
     return make_response(list_film)
 
 @app.get("/acteurs/autocomplete")
 def get_autocomplete_film(request: Request, name: str):
     acteur = Acteurs()
     list_acteur = acteur.get_list_acteurs().loc[:, ['id', 'name']]
-    list_acteur = list_acteur[list_acteur['name'].str.contains(name, case=False)]
+    list_acteur = list_acteur[list_acteur['name'].str.contains(name, case=False).fillna(False)]
+
+    if list_acteur.empty:
+        return []
+
     return make_response(list_acteur)
