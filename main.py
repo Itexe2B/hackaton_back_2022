@@ -1,7 +1,8 @@
-from fastapi import FastAPI, Response
+from fastapi import FastAPI, Response, Request
 from pydantic import BaseModel
 from typing import List
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 
 from Model.Acteurs import Acteurs
 from Model.Films import Films
@@ -20,6 +21,8 @@ class FilmBaseModel(BaseModel):
     films: List[int]
 
 app = FastAPI()
+app.add_middleware(SessionMiddleware, secret_key="mysupersecretkey", max_age=18000)
+
 # Allow all origins
 origins = [
     "*"
@@ -33,19 +36,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 @app.post("/genres/")
-def add_genre(genre: GenreBaseModel):
+def add_genre(request: Request, genre: GenreBaseModel):
+    request.session["genres"] = genre.genres
     return {"genres": genre.genres}
 
 @app.post("/acteurs/")
-def add_acteur(acteur: ActeurBaseModel):
+def add_acteur(request: Request, acteur: ActeurBaseModel):
+    request.session["acteurs"] = acteur.acteurs
     return {"acteurs": acteur.acteurs}
 
 @app.post("/films/")
-def get_film(film: FilmBaseModel):
+def add_film(request: Request, film: FilmBaseModel):
+    request.session["films"] = film.films
     return {"films": film.films}
 
 @app.get("/genres/list")
-def get_list_genre():
+def get_list_genre(request: Request):
     genres = Genres()
     list_genre = genres.get_list_genres()
     return sorted(list_genre, key=lambda d: d['name'])
