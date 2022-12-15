@@ -98,8 +98,14 @@ def get_autocomplete_film(name: str):
 
     return make_response(list_acteur)
 
-@app.get("/films/thumbnail")
-def get_thumbnail_film(id: int):
+@app.get("/films/infos")
+def get_infos_film(id: int):
     film = Films()
-    thumbnail = film.get_thumbnail(id)
-    return {"thumbnail": thumbnail}
+    thumbnail, url = film.get_infos(id)
+
+    return {
+        "thumbnail": thumbnail,
+        "url": url,
+        "genres": film.data.df_movies.loc[film.data.df_movies['id'] == id, 'genres'].values[0],
+        "description": film.data.df_movies.loc[film.data.df_movies['id'] == id, 'overview'],
+            }
