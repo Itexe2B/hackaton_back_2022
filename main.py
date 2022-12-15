@@ -73,8 +73,8 @@ def get_list_film():
 @app.get("/recommandation")
 def get_recommandation(request: Request):
     recommandation = Recommandation(request.session)
-    list_recommandation = recommandation.get_list().loc[:, ['id', 'title']]
-    return make_response(list_recommandation)
+    list_recommandation = recommandation.get_list().loc[:, ['id', 'title', 'score']]
+    return make_response(list_recommandation.iloc[:50])
 
 @app.get("/films/autocomplete")
 def get_autocomplete_film(request: Request, title: str):
