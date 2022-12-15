@@ -1,7 +1,8 @@
 from fastapi import FastAPI
+from Data import Data
 
 app = FastAPI()
-
+Data()
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
