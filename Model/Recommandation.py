@@ -37,6 +37,7 @@ class Recommandation:
         list_genre = self.session['genres']
         list_films = self.session['films']
         list_acteur = self.session['acteurs']
+        print(list_genre)
         recommandation = self.data.df_movies.loc[:, ['id', 'title', 'genres', 'vote_average', 'popularity']]
         recommandation['score'] = 0
         #add 10 to score if the genre is in the list of genre
