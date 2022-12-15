@@ -108,4 +108,5 @@ def get_infos_film(id: int):
         "url": url,
         "genres": film.data.df_movies.loc[film.data.df_movies['id'] == id, 'genres'].values[0],
         "description": film.data.df_movies.loc[film.data.df_movies['id'] == id, 'overview'],
+        "preview_link": film.get_preview(id)
             }

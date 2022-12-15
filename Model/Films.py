@@ -2,7 +2,7 @@ import pandas as pd
 from Data import Data
 import requests
 import json
-
+import re
 class Films:
     def __init__(self):
         self.data = Data.get_instance()
@@ -21,4 +21,20 @@ class Films:
         return thumbnail,url
 
     def get_preview(self, id):
-        pass
+        url = "https://www.allocine.fr/film/fichefilm_gen_cfilm=" + str(id) + ".html"
+        body = requests.get(url)
+        result = re.findall('''(?<=\<figure class=\"player player-auto-play js-player\" data-model=\")(.*)(?=data-player-dm-id)''', body.text)
+        result = result[0].replace('\"', '')
+        result = result.replace('&quot', '')
+        result = result.replace(';', '')
+        result = result.replace(':', '_')
+        try:
+            result = re.findall('''(?<=_).*?(?=,)''', result)[1]
+        except:
+            return ""
+
+        url = "https://www.dailymotion.com/player/metadata/video/" + result
+        body = requests.get(url)
+        json_data = json.loads(body.text)
+        return json_data['qualities']['auto'][0]['url']
+
