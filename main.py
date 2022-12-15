@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List
+from fastapi.middleware.cors import CORSMiddleware
+
+
 class Genre(BaseModel):
     genres: List[int]
 
@@ -11,6 +14,18 @@ class Film(BaseModel):
     films: List[int]
 
 app = FastAPI()
+# Allow all origins
+origins = [
+    "*"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.post("/genres/")
 def add_genre(genre: Genre):
