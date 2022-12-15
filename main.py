@@ -79,56 +79,57 @@ def get_list_genre():
 
 @app.get("/acteurs/list")
 def get_list_acteur():
-    #sort by name
+    # return list of famous actors
     return {"acteurs": [{
         "id": 1,
-        "name": "Alain Delon"
+        "name": "Tom Cruise"
         },
         {
             "id": 2,
-            "name": "Alain Chabat"
+            "name": "Brad Pitt"
         },
         {
             "id": 3,
-            "name": "Alain Delon"
+            "name": "Johnny Depp"
         },
         {
             "id": 4,
-            "name": "Alain Delon"
+            "name": "Leonardo DiCaprio"
         },
         {
             "id": 5,
-            "name": "Alain Delon"
+            "name": "Will Smith"
         },
         {
             "id": 6,
-            "name": "Alain Delon"
+            "name": "Robert Downey Jr."
         },
         {
             "id": 7,
-            "name": "Alain Delon"
+            "name": "Dwayne Johnson"
         },
         {
             "id": 8,
-            "name": "Alain Delon"
+            "name": "Adam Sandler"
         },
         {
             "id": 9,
-            "name": "Alain Delon"
+            "name": "Tom Hanks"
         },
         {
             "id": 10,
-            "name": "Alain Delon"
+            "name": "Chris Hemsworth"
         },
         {
             "id": 11,
-            "name": "Alain Delon"
+            "name": "Chris Evans"
         },
         {
             "id": 12,
-            "name": "Alain Delon"
+            "name": "Mark Ruffalo"
         }
     ]}
+
 
 @app.get("/films/list")
 def get_list_film():
