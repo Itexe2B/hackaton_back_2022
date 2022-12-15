@@ -59,7 +59,6 @@ class Recommandation:
                                                recommandation['score'] + 1,
                                                recommandation['score'])
 
-        #recommandation = recommandation.sort_values(by=['score', 'vote_average', 'popularity'], ascending=True)
         recommandation = recommandation.sort_values(by=['score', 'vote_average', 'popularity'], ascending=False)
         return recommandation[recommandation['score'] > 0]
 
