@@ -38,17 +38,17 @@ app.add_middleware(
 @app.post("/genres/")
 def add_genre(request: Request, genre: GenreBaseModel):
     request.session["genres"] = genre.genres
-    return {"genres": genre.genres}
+    return Response(status_code=201)
 
 @app.post("/acteurs/")
 def add_acteur(request: Request, acteur: ActeurBaseModel):
     request.session["acteurs"] = acteur.acteurs
-    return {"acteurs": acteur.acteurs}
+    return Response(status_code=201)
 
 @app.post("/films/")
 def add_film(request: Request, film: FilmBaseModel):
     request.session["films"] = film.films
-    return {"films": film.films}
+    return Response(status_code=201)
 
 @app.get("/genres/list")
 def get_list_genre(request: Request):
