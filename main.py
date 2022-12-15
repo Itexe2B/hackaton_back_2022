@@ -1,18 +1,22 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from pydantic import BaseModel
 from typing import List
 from fastapi.middleware.cors import CORSMiddleware
 
-import Model.Acteurs as Acteurs
-import Model.Films as Films
-import Model.Genres as Genres
-class Genre(BaseModel):
+from Model.Acteurs import Acteurs
+from Model.Films import Films
+from Model.Genres import Genres
+
+def make_response(data, status_code=200):
+    return Response(content=data.to_json(orient="records"), status_code=status_code, headers={"Content-Type": "application/json"})
+
+class GenreBaseModel(BaseModel):
     genres: List[int]
 
-class Acteur(BaseModel):
+class ActeurBaseModel(BaseModel):
     acteurs: List[int]
 
-class Film(BaseModel):
+class FilmBaseModel(BaseModel):
     films: List[int]
 
 app = FastAPI()
@@ -29,66 +33,51 @@ app.add_middleware(
     allow_headers=["*"],
 )
 @app.post("/genres/")
-def add_genre(genre: Genre):
+def add_genre(genre: GenreBaseModel):
     return {"genres": genre.genres}
 
 @app.post("/acteurs/")
-def add_acteur(acteur: Acteur):
+def add_acteur(acteur: ActeurBaseModel):
     return {"acteurs": acteur.acteurs}
 
 @app.post("/films/")
-def get_film(film: Film):
+def get_film(film: FilmBaseModel):
     return {"films": film.films}
 
 @app.get("/genres/list")
 def get_list_genre():
-    #sort by name
-    return {"genres": [{
+    genres = Genres()
+    list_genre = genres.get_list_genres()
+    return sorted(list_genre, key=lambda d: d['name'])
+
+@app.get("/acteurs/list")
+def get_list_acteur():
+    acteur = Acteurs()
+    list_acteur = acteur.get_list_acteurs().loc[:, ['id', 'name']].sort_values(by=['name'])
+    return make_response(list_acteur)
+
+@app.get("/films/list")
+def get_list_film():
+    #get list of famous films
+    film = Films()
+    list_film = film.get_list_film().loc[:, ['id', 'title']].sort_values(by=['title'])
+    return make_response(list_film)
+@app.get("/recommandation")
+def get_recommandation():
+    return {"films": [{
         "id": 1,
-        "name": "Action"
+        "name": "Le Parrain"
         },
         {
             "id": 2,
-            "name": "Aventure"
+            "name": "Le Parrain 2"
         },
         {
             "id": 3,
-            "name": "Comédie"
+            "name": "Le Parrain 3"
         },
         {
             "id": 4,
-            "name": "Drame"
-        },
-        {
-            "id": 5,
-            "name": "Fantastique"
-        },
-        {
-            "id": 6,
-            "name": "Horreur"
-        },
-        {
-            "id": 7,
-            "name": "Policier"
-        },
-        {
-            "id": 8,
-            "name": "Romance"
-        },
-        {
-            "id": 9,
-            "name": "Science-Fiction"
-        },
-        {
-            "id": 10,
-            "name": "Thriller"
-        },
-        {
-            "id": 11,
-            "name": "Western"
-        },
-        {
-            "id": 12,
-            "name": "Autre"
-        }
-    ]}
+            "name": "Forrest Gump"
+        }]
+    }
