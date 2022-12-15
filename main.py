@@ -1,14 +1,14 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-
+from typing import List
 class Genre(BaseModel):
-    genres: [int]
+    genres: List[int]
 
 class Acteur(BaseModel):
-    acteurs: [int]
+    acteurs: List[int]
 
 class Film(BaseModel):
-    films: [int]
+    films: List[int]
 
 app = FastAPI()
 
