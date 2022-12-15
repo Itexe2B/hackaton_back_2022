@@ -7,6 +7,8 @@ from starlette.middleware.sessions import SessionMiddleware
 from Model.Acteurs import Acteurs
 from Model.Films import Films
 from Model.Genres import Genres
+from Model.Recommandation import Recommandation
+
 
 def make_response(data, status_code=200):
     return Response(content=data.to_json(orient="records"), status_code=status_code, headers={"Content-Type": "application/json"})
@@ -69,21 +71,7 @@ def get_list_film():
     list_film = film.get_list_film().loc[:, ['id', 'title']].sort_values(by=['title'])
     return make_response(list_film)
 @app.get("/recommandation")
-def get_recommandation():
-    return {"films": [{
-        "id": 1,
-        "name": "Le Parrain"
-        },
-        {
-            "id": 2,
-            "name": "Le Parrain 2"
-        },
-        {
-            "id": 3,
-            "name": "Le Parrain 3"
-        },
-        {
-            "id": 4,
-            "name": "Forrest Gump"
-        }]
-    }
+def get_recommandation(request: Request):
+    recommandation = Recommandation(request.session)
+    list_recommandation = recommandation.get_list().loc[:, ['id', 'title']]
+    return make_response(list_recommandation)
