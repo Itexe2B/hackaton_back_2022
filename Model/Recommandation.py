@@ -9,6 +9,15 @@ class Recommandation:
         self.data = Data.get_instance()
 
     def get_list(self):
+        if self.session['genres'] is None:
+            self.session['genres'] = []
+
+        if self.session['acteurs'] is None:
+            self.session['acteurs'] = []
+
+        if self.session['films'] is None:
+            self.session['films'] = []
+
         list_genre = self.session['genres']
         list_films = self.session['films']
         list_acteur = self.session['acteurs']
