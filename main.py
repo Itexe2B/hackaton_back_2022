@@ -28,7 +28,7 @@ app.add_middleware(SessionMiddleware, secret_key="mysupersecretkey", max_age=180
 
 # Allow all origins
 origins = [
-    "http://localhost:8080"
+    "*"
 ]
 
 app.add_middleware(
@@ -74,7 +74,7 @@ def get_list_film():
     return make_response(list_film)
 @app.get("/recommandation")
 def get_recommandation(request: Request):
-    recommandation = Recommandation(request.session)
+    recommandation = Recommandation()
     list_recommandation = recommandation.get_list().loc[:, ['id', 'title', 'score']]
     return make_response(list_recommandation.iloc[:50])
 
