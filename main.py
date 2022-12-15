@@ -8,6 +8,7 @@ from Model.Acteurs import Acteurs
 from Model.Films import Films
 from Model.Genres import Genres
 from Model.Recommandation import Recommandation
+from Session import Session
 
 
 def make_response(data, status_code=200):
@@ -39,17 +40,18 @@ app.add_middleware(
 )
 @app.post("/genres/")
 def add_genre(request: Request, genre: GenreBaseModel):
-    request.session["genres"] = genre.genres
+    #request.session["genres"] = genre.genres
+    Session.get_instance().put_session("genres", genre.genres)
     return Response(status_code=201)
 
 @app.post("/acteurs/")
 def add_acteur(request: Request, acteur: ActeurBaseModel):
-    request.session["acteurs"] = acteur.acteurs
+    Session.get_instance().put_session("acteurs", acteur.acteurs)
     return Response(status_code=201)
 
 @app.post("/films/")
 def add_film(request: Request, film: FilmBaseModel):
-    request.session["films"] = film.films
+    Session.get_instance().put_session("films", film.films)
     return Response(status_code=201)
 
 @app.get("/genres/list")

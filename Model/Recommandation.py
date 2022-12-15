@@ -2,6 +2,7 @@ import pandas as pd
 import json
 import numpy as np
 from Data import Data
+from Session import Session
 
 
 def get_list_id(list_dict):
@@ -11,8 +12,8 @@ def get_list_id(list_dict):
     return list_id
 
 class Recommandation:
-    def __init__(self, session):
-        self.session = session
+    def __init__(self):
+        self.session = Session.get_instance().session
         self.data = Data.get_instance()
 
     def get_list(self):
