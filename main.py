@@ -75,3 +75,17 @@ def get_recommandation(request: Request):
     recommandation = Recommandation(request.session)
     list_recommandation = recommandation.get_list().loc[:, ['id', 'title']]
     return make_response(list_recommandation)
+
+@app.get("/films/autocomplete")
+def get_autocomplete_film(request: Request, title: str):
+    film = Films()
+    list_film = film.get_list_film().loc[:, ['id', 'title']]
+    list_film = list_film[list_film['title'].str.contains(title, case=False)]
+    return make_response(list_film)
+
+@app.get("/acteurs/autocomplete")
+def get_autocomplete_film(request: Request, name: str):
+    acteur = Acteurs()
+    list_acteur = acteur.get_list_acteurs().loc[:, ['id', 'name']]
+    list_acteur = list_acteur[list_acteur['name'].str.contains(name, case=False)]
+    return make_response(list_acteur)
