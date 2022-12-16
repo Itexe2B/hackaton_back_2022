@@ -38,7 +38,7 @@ class Recommandation:
         list_genre = self.session['genres']
         list_films = self.session['films']
         list_acteur = self.session['acteurs']
-        print(list_genre)
+
         recommandation = self.data.df_movies.loc[:, ['id', 'title', 'genres', 'vote_average', 'popularity']]
         recommandation['score'] = 0
         #add 10 to score if the genre is in the list of genre
@@ -49,9 +49,15 @@ class Recommandation:
                                                recommandation['score'])
 
         #add 5 to score if the film is in the list of film
+        list_genre_to_up = {}
         for film in list_films:
-            recommandation['score'] = np.where(recommandation['id'] == film,
-                                               recommandation['score'] + 5,
+            for genre in recommandation.loc[recommandation['id'] == film, 'genres'].values[0]:
+                list_genre_to_up[genre['id']] = list_genre_to_up.get(genre['id'], 0) + 1
+
+        for id, coef in list_genre_to_up.items():
+            recommandation['score'] = np.where(recommandation['genres']
+                                               .apply(lambda item: id in get_list_id(item if len(item) > 0 else [])),
+                                               recommandation['score'] + 2 * coef,
                                                recommandation['score'])
 
         #add 1 to score if the actor is in the list of actor
@@ -62,5 +68,6 @@ class Recommandation:
                                                recommandation['score'])
 
         recommandation = recommandation.sort_values(by=['score', 'vote_average', 'popularity'], ascending=False)
+        #recommandation = recommandation.loc[recommandation['id'] not in list_films, :]
         return recommandation[recommandation['score'] > 0]
 

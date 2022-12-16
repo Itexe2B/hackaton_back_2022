@@ -24,6 +24,8 @@ class Films:
         url = "https://www.allocine.fr/film/fichefilm_gen_cfilm=" + str(id) + ".html"
         body = requests.get(url)
         result = re.findall('''(?<=\<figure class=\"player player-auto-play js-player\" data-model=\")(.*)(?=data-player-dm-id)''', body.text)
+        if result == []:
+            return ""
         result = result[0].replace('\"', '')
         result = result.replace('&quot', '')
         result = result.replace(';', '')
