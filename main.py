@@ -101,12 +101,13 @@ def get_autocomplete_film(name: str):
 @app.get("/films/infos")
 def get_infos_film(id: int):
     film = Films()
-    thumbnail, url = film.get_infos(id)
+    thumbnail, url, id_video = film.get_infos(id)
+    print(id_video)
 
     return {
         "thumbnail": thumbnail,
         "url": url,
         "genres": film.data.df_movies.loc[film.data.df_movies['id'] == id, 'genres'].values[0],
         "description": film.data.df_movies.loc[film.data.df_movies['id'] == id, 'overview'],
-        "preview_link": film.get_preview(id)
+        "preview_link": film.get_preview(id, id_video)
             }
